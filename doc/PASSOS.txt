@@ -12,19 +12,23 @@ python -m venv .venv
 Get-ExecutionPolicy
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 .\.venv\Scripts\activate
+################
+
+################
+#Dependencias
 #Instala o django
 pip install django
 #Inicia novo projeto django. o . é para não criar uma pasta a mais
 django-admin startproject setup .
-
-#Dependencias
 pip install decouple
 pip install dj-database-url
 pip install django-crispy-forms
 pip install crispy-bootstrap5
-pip install pytest #executar precisa ter um arquivo que começe ou termine com nome test e digitar pytest no Terminal
+pip install requests pytest #executar precisa ter um arquivo que começe ou termine com nome test e digitar pytest no Terminal
+pip install pycoingecko #disse que ja tinha alguns componentes mas nao todos. provavelmente requests
+################
 
-
+################
 #Cria um app
 python manage.py startapp arbitrage
 #Cria migracao AO ALTERAR OS MODELOS DEVE EXECUTAR makemigrations e migrate
@@ -36,8 +40,6 @@ python manage.py runserver
 
 
 ################
-
-
 
 ################
 #GIT
@@ -54,7 +56,6 @@ git commit -m "sua mensagem"                : Cria um novo commit com as altera�
 git push                                    : Envia seus commits locais para o repositório remoto (como no GitHub).
 git remote add origin [URL do repositório]  : Conecta o seu repositório local a um repositório remoto.
 git clone [URL do repositório]              : Clona um repositório remoto existente para o seu computador. 
-
 
 #…or create a new repository on the command line
 echo "# cardoso_trading" >> README.md

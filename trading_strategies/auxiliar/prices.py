@@ -1,5 +1,6 @@
 import requests
 from trading_strategies.auxiliar.excecoes.excecao_request import RequestError, verificar_request
+from pycoingecko import CoinGeckoAPI
 
 def get_crypto_prices(coin_ids, currency):
     """
@@ -21,6 +22,20 @@ def get_crypto_prices(coin_ids, currency):
         return data
     except RequestError as e:
         raise RequestError(e)
+    
+def get_cg_crypto_prices(coin_ids, currency):
+    cg = CoinGeckoAPI()
+    try:
+        price_data = cg.get_price(ids=coin_ids, vs_currencies=currency)
+        return price_data[coin_ids][currency]
+    except Exception as e:
+        print(f"Error fetching Bitcoin price: {e}")
+        return None
+
+# criptos = ['bitcoin', 'ethereum', 'dogecoin']
+# valores = get_cg_crypto_prices(criptos, 'brl')
+# for cripto, preco in valores.items():
+#     print(f"Preço de {cripto.capitalize()}: R$ {preco['brl']:.10f}")
 
 #while True: #depois de 5 chamadas gera erro: Erro ao obter dados: 429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/simple/price?ids=bitcoin%2Cethereum%2Cdogecoin&vs_currencies=brl
 #    # Exemplo de uso

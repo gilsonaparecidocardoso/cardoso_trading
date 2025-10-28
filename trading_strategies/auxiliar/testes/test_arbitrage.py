@@ -8,6 +8,7 @@ def teste_arbitrage():
     if btc_ticker:
         for cripto, preco in btc_ticker.items():
             try:
+                print(btc_ticker.items())
                 verificar_valor(preco['brl'])
                 print(f"Preço de {cripto.capitalize()}: R$ {preco['brl']:.2f}")
             except ValorInvalidoError as e:

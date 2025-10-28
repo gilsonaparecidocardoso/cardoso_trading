@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+
+        <h1>Oportunidades de Arbitragem</h1>
+        </br>
+        </br>
+        
+        <div class="row">
+            {% for arbitragem in arbitragemcard_list %}
+                <div class="col-md-4">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                           {{ arbitragem.data }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title"> Cripto_a: {{ arbitragem.cripto_a }} </h5>
+                            <p class="card-text">R$ {{ arbitragem.price_a|floatformat:10 }}</p>
+                            <h6 class="card-subtitle"> Cripto_b: {{ arbitragem.cripto_b }} </h6>
+                            <p class="card-text">R$ {{ arbitragem.price_b|floatformat:10 }}</p>                            
+                            <p class="card-text"> {{ arbitragem.processo }}</p>
+                            <p class="card-text"> {{ arbitragem.lucro }}</p>
+                            <a href="#" class="btn btn-primary">Ver Detalhes</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Atualizado em: {{ time.now|date:"d/m/Y H:i" }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
