@@ -1,0 +1,37 @@
+Django
+https://www.youtube.com/watch?v=MsUL3Pgofl4
+
+#Criar pasta com o nome do projeto
+#Arrastar a pasta para o VSCODE
+#Cria o venv (-m modulo / venv o modulo / .venv o nome da maquina virtual)
+python -m venv .venv
+#Libera o venv
+Get-ExecutionPolicy
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\activate
+#Instala o django
+pip install django
+#Inicia novo projeto django. o . é para não criar uma pasta a mais
+django-admin startproject setup .
+#Cria um app
+python manage.py startapp arbitrage
+#cria migracao AO ALTERAR OS MODELOS DEVE EXECUTAR makemigrations e migrate
+python manage.py makemigrations
+#executa migracao
+python manage.py migrate
+#executa aplicação
+python manage.py runserver
+
+#GIT
+#Comandos Git básicos para o fluxo de trabalho
+#Para usar o GIT no console Incluir no arquivo C:\Users\user\AppData\Roaming\Code\User\settings.json
+"terminal.integrated.defaultProfile.windows": "Git Bash",
+"terminal.integrated.tabs.enabled": true
+
+#Com a pasta raiz aberta cria o repositorio
+git init
+git add .                                   : Adiciona todos os arquivos modificados para a área de preparação (staging).
+git commit -m "sua mensagem"                : Cria um novo commit com as alterações e uma mensagem descritiva.
+git push                                    : Envia seus commits locais para o repositório remoto (como no GitHub).
+git remote add origin [URL do repositório]  : Conecta o seu repositório local a um repositório remoto.
+git clone [URL do repositório]              : Clona um repositório remoto existente para o seu computador. 
