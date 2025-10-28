@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block page_title %}Arbitragem{% endblock page_title %}
+
+{% block content %}
+    <h1>Arbitragem</h1>
+
+    {%if arbitragem_list %}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Valor A (R$)</th>
+                    <th scope="col">Cripto A</th>
+                    <th scope="col">Valor B (R$)</th>
+                    <th scope="col">Cripto B</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Processo</th>
+                </tr>
+            </thead>
+            <tbody table-striped>
+
+                {% for arbitragem in arbitragem_list %}
+                    <tr>
+                        <td>{{ arbitragem.price_a }}</td>
+                        <td>{{ arbitragem.cripto_a }}</td>
+                        <td>{{ arbitragem.price_b }}</td>
+                        <td>{{ arbitragem.cripto_b}}</td>
+                        <td>{{ arbitragem.data}}</td>
+                        <td>{{ arbitragem.processo}}</td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+    {% else %}
+        <p class="alert alert-info">Nenhuma arbitragem encontrada.</p>
+    {% endif %}
+
+    <!--<a href="{% url 'arbitragem_form' %}" class="btn btn-primary">Nova Arbitragem</a>-->
+
+{% endblock content %}

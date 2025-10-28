@@ -1,6 +1,9 @@
+################
 Django
 https://www.youtube.com/watch?v=MsUL3Pgofl4
+################
 
+################
 #Criar pasta com o nome do projeto
 #Arrastar a pasta para o VSCODE
 #Cria o venv (-m modulo / venv o modulo / .venv o nome da maquina virtual)
@@ -13,20 +16,36 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 pip install django
 #Inicia novo projeto django. o . é para não criar uma pasta a mais
 django-admin startproject setup .
+
+#Dependencias
+pip install decouple
+pip install dj-database-url
+pip install django-crispy-forms
+pip install crispy-bootstrap5
+pip install pytest #executar precisa ter um arquivo que começe ou termine com nome test e digitar pytest no Terminal
+
+
 #Cria um app
 python manage.py startapp arbitrage
-#cria migracao AO ALTERAR OS MODELOS DEVE EXECUTAR makemigrations e migrate
+#Cria migracao AO ALTERAR OS MODELOS DEVE EXECUTAR makemigrations e migrate
 python manage.py makemigrations
 #executa migracao
 python manage.py migrate
 #executa aplicação
 python manage.py runserver
 
+
+################
+
+
+
+################
 #GIT
 #Comandos Git básicos para o fluxo de trabalho
 #Para usar o GIT no console Incluir no arquivo C:\Users\user\AppData\Roaming\Code\User\settings.json
 "terminal.integrated.defaultProfile.windows": "Git Bash",
 "terminal.integrated.tabs.enabled": true
+#ATALHO CTRL+SHIFT+G
 
 #Com a pasta raiz aberta cria o repositorio
 git init
@@ -35,3 +54,20 @@ git commit -m "sua mensagem"                : Cria um novo commit com as altera�
 git push                                    : Envia seus commits locais para o repositório remoto (como no GitHub).
 git remote add origin [URL do repositório]  : Conecta o seu repositório local a um repositório remoto.
 git clone [URL do repositório]              : Clona um repositório remoto existente para o seu computador. 
+
+
+#…or create a new repository on the command line
+echo "# cardoso_trading" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/gilsonaparecidocardoso/cardoso_trading.git
+git push -u origin main
+
+#…or push an existing repository from the command line
+git remote add origin https://github.com/gilsonaparecidocardoso/cardoso_trading.git
+git branch -M main
+git push -u origin main
+
+################
