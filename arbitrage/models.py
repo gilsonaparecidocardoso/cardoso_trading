@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 from django.db import models
 
 class Arbitragem(models.Model):
@@ -6,7 +6,7 @@ class Arbitragem(models.Model):
     cripto_a = models.CharField(verbose_name="Cripto A:", max_length=200, null=False, blank=False)
     price_b  = models.DecimalField(verbose_name="Valor B (R$):", max_digits=10, decimal_places=2, null=False, blank=False)    
     cripto_b = models.CharField(verbose_name="Cripto B:", max_length=200, null=False, blank=False)
-    data     = models.DateField(verbose_name="Data:", default=date.today)
+    data     = models.DateTimeField(verbose_name="Data:", default=datetime.now())
     processo = models.CharField(verbose_name="Processo:", max_length=200, null=False, blank=False)
 
 class Meta:
@@ -17,9 +17,15 @@ class ArbitragemCard(models.Model):
     cripto_a = models.CharField(verbose_name="Cripto A:", max_length=200, null=False, blank=False)
     price_b  = models.DecimalField(verbose_name="Valor B (R$):", max_digits=10, decimal_places=2, null=False, blank=False)    
     cripto_b = models.CharField(verbose_name="Cripto B:", max_length=200, null=False, blank=False)
-    data     = models.DateField(verbose_name="Data:", default=date.today)
+    data     = models.DateTimeField(verbose_name="Data:", default=datetime.now())
     processo = models.CharField(verbose_name="Processo:", max_length=200, null=False, blank=False)
 
+    @property
+    def diferenca_cripto(self):
+        if self.price_a > self.price_b:
+            return self.price_a - self.price_b
+        else:
+            return self.price_b - self.price_a
 
 class Produto(models.Model):
     nome = models.CharField(max_length=100)

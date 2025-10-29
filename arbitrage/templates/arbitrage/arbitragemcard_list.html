@@ -5,25 +5,25 @@
         <h1>Oportunidades de Arbitragem</h1>
         </br>
         </br>
-        
         <div class="row">
             {% for arbitragem in arbitragemcard_list %}
                 <div class="col-md-4">
-                    <div class="card" style="width: 18rem;">
+                    <div class="card" style="width: 18rem;" >
                         <div class="card-header">
-                           {{ arbitragem.data }}
+                           <p class="card-text"> {{ arbitragem.data | date:"d/m/Y H:i:s" }} </p> 
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title"> Cripto_a: {{ arbitragem.cripto_a }} </h5>
-                            <p class="card-text">R$ {{ arbitragem.price_a|floatformat:10 }}</p>
+                            <h5 class="card-title"> Oportunidade 01 </h5>
+                            <h6 class="card-subtitle"> Cripto_a: {{ arbitragem.cripto_a }} </h6>
+                            <p class="card-text">R$ {{ arbitragem.price_a | floatformat:10 }} </p>
                             <h6 class="card-subtitle"> Cripto_b: {{ arbitragem.cripto_b }} </h6>
-                            <p class="card-text">R$ {{ arbitragem.price_b|floatformat:10 }}</p>                            
-                            <p class="card-text"> {{ arbitragem.processo }}</p>
-                            <p class="card-text"> {{ arbitragem.lucro }}</p>
-                            <a href="#" class="btn btn-primary">Ver Detalhes</a>
+                            <p class="card-text">R$ {{ arbitragem.price_b | floatformat:10 }} </p>                            
+                            <p class="card-text"> Processo: {{ arbitragem.processo }} </p>
+                            <p class="card-text"> Diferença: {{ arbitragem.diferenca_cripto }} </p>
+                            <a href="#" class="btn btn-primary">Ver Detalhes </a>
                         </div>
                         <div class="card-footer text-muted">
-                            Atualizado em: {{ time.now|date:"d/m/Y H:i" }}
+                            Atualizado em: {% now "d/m/Y H:i:s" %}
                         </div>
                     </div>
                 </div>

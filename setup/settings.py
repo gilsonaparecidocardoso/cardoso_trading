@@ -115,3 +115,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+DATE_FORMAT = "%d/%m/%Y"
+
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
+
+USE_L10N = False

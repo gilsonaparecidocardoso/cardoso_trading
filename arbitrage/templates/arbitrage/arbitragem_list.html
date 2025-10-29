@@ -24,7 +24,7 @@
                         <td>{{ arbitragem.cripto_a }}</td>
                         <td>{{ arbitragem.price_b }}</td>
                         <td>{{ arbitragem.cripto_b}}</td>
-                        <td>{{ arbitragem.data}}</td>
+                        <td>{{ arbitragem.data | date:"d/m/Y"}}</td>
                         <td>{{ arbitragem.processo}}</td>
                     </tr>
                 {% endfor %}
@@ -35,7 +35,5 @@
     {% else %}
         <p class="alert alert-info">Nenhuma arbitragem encontrada.</p>
     {% endif %}
-
-    <!--<a href="{% url 'arbitragem_form' %}" class="btn btn-primary">Nova Arbitragem</a>-->
 
 {% endblock content %}
