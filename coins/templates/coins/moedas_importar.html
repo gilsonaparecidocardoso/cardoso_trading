@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block page_title %}Moedas{% endblock page_title %}
+{% block content %}
+    <h1>Moedas</h1>
+    <div class="row">
+        <div class="jumbotron">
+            {% crispy form %}
+
+        </div>
+    </div>
+{% endblock %}

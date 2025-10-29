@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block page_title %}Moedas{% endblock page_title %}
+{% block content %}
+    <h1>Moedas</h1>
+
+    {%if moedas_list %}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Símbolo</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Plataformas</th>
+                    <th scope="col">Valor</th>
+                    <th scope="col">Data</th>
+                </tr>
+            </thead>
+            <tbody table-striped>
+
+                {% for moeda in moedas_list %}
+                    <tr>
+                        <td>{{ moeda.symbol }}</td>
+                        <td>{{ moeda.name }}</td>
+                        <td>{{ moeda.platforms }}</td>
+                        <td>{{ moeda.currency}}</td>                        
+                        <td>{{ moeda.data | date:"d/m/Y"}}</td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        <form action = "{% url 'getcoins' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <label for="word">Digite uma palavra:</label>
+            <input id="word" type="text" name="palavra" value="" />
+            <button type="submit" class="btn btn-primary">Importar moedas</button>     
+        </form>
+
+    {% else %}
+        <p class="alert alert-info">Nenhuma moeda encontrada.</p>
+        
+        {% comment %} <Form action="{% url 'getcoins' %}" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Importar moedas</button>
+        </form> {% endcomment %}
+
+    {% endif %}
+
+{% endblock content %}
