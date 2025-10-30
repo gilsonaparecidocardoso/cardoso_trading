@@ -1,0 +1,27 @@
+{% load crispy_forms_tags %}
+
+<h1>{{ produto.nome }}</h1>
+<p>{{ produto.descricao }}</p>
+<p>Preço: R$ {{ produto.preco }}</p>
+
+<h1>{{ produto.nome }} Detalhes</h1>
+
+  <!-- Option 1: Render the entire form if passed in context -->
+  <form method="post">
+      {% csrf_token %}
+      {% crispy form %}
+  </form>
+
+  <!-- Option 2: Display individual fields directly from the object with basic Bootstrap styling -->
+  <div class="card mb-3">
+      <div class="card-body">
+          <h5 class="card-title">Descrição:</h5>
+          <p class="card-text">{{ produto.descricao }}</p>
+      </div>
+  </div>
+  <div class="card mb-3">
+      <div class="card-body">
+          <h5 class="card-title">Preço:</h5>
+          <p class="card-text">{{ produto.preco }}</p>
+      </div>
+  </div>

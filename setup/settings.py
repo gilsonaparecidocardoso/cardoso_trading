@@ -27,7 +27,7 @@ THIRD_PARTY_APPS = [
     "crispy_bootstrap5",
 ]
 
-MY_APPS = ["arbitrage.apps.ArbitragemConfig", "coins.apps.MoedasConfig"]
+MY_APPS = ["arbitrage.apps.ArbitragemConfig", "coins.apps.MoedasConfig", "produto.apps.ProdutoConfig"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 

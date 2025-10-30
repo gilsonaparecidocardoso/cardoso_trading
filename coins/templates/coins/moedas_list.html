@@ -32,7 +32,7 @@
 
         </table>
 
-        <form action = "{% url 'getcoins' %}">
+        <form method="POST" action = "{% url 'getcoins' %}">
             {% csrf_token %}
             {{ form|crispy }}
             <label for="word">Digite uma palavra:</label>
