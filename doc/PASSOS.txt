@@ -30,7 +30,7 @@ pip install pycoingecko #disse que ja tinha alguns componentes mas nao todos. pr
 
 ################
 #Cria um app
-python manage.py startapp arbitrage
+python manage.py startapp nome_app
 #Cria migracao AO ALTERAR OS MODELOS DEVE EXECUTAR makemigrations e migrate
 python manage.py makemigrations
 #executa migracao

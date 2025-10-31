@@ -1,70 +1,229 @@
+from datetime import datetime 
 import sqlite3
 import json
 from django.http import HttpResponse
-from django.views.generic import ListView, CreateView, View
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView
 from .models import Moedas
-from django.urls import reverse_lazy, reverse #usado para redirecionamento pós criação
+#from django.urls import reverse_lazy, reverse #usado para redirecionamento pós criação
 from django.shortcuts import get_object_or_404, redirect, render
 # from django.utils import timezone
 # from django.http import JsonResponse
 from pycoingecko import CoinGeckoAPI
 cg = CoinGeckoAPI()
 
+
+#
+#
+def getcoins(request):
+    if request.method == 'POST':
+        try:
+            inserir_preco = False
+            coin_list = cg.get_coins_list(include_platform=True)
+            if(total_moeda() == len(coin_list)):
+                print("getcoins-3-Todas as moedas já incluídas.")
+            else:             
+                cont=0
+                count_erro=0
+                print(f'Moedas {len(coin_list)} a serem incluídas.')
+                for coin in coin_list[:len(coin_list)]:
+
+                    if(inserir_preco):
+
+                        try:
+                            #value_coin_list = cg.get_price(ids=coin['id'], vs_currencies='brl')
+                            value_coin_list = {0}
+                            print('LEN: ', len(value_coin_list))                        
+                            if(len(value_coin_list) > 1):
+                                #print('11value_coin_list tem valor')
+                                #print(f"ID: {coin['id']}, Símbolo: {coin['symbol']}, Nome: {coin['name']}, Plataformas: {coin['platforms']}")
+                                try:
+                                    valor = value_coin_list[coin['id']]['brl']
+                                except KeyError as k:
+                                    #print('primeiro erro')
+                                    count_erro = count_erro+1
+                                    print(f">>getcoins-9-A chave 'brl' não existe para a moeda {coin['id']} e será incuído com valor = 0.")
+                                    valor = 0
+                                    insere_moeda(coin['symbol'], coin['name'], coin['platforms'], valor, datetime.now(), coin['id'])
+                                    print('>>getcoins-9.1 - INSERIU com valor = 0 - cont>' , cont, ' - contErro>' , count_erro, ' - ' , coin['id'])  
+                                
+                                #print('22value_coin_list tem id: ' + coin['id'] + ' e brl!')
+                                if (valor):
+                                    cont = cont+1
+                                    print('33', coin['symbol'], coin['name'], coin['platforms'], valor, datetime.now(), coin['id'])
+                                    insere_moeda(coin['symbol'], coin['name'], coin['platforms'], valor, datetime.now(), coin['id']) 
+                                    print('44getcoins-7.1 - INSERIU - cont>' , cont, ' - contErro>' , count_erro, ' - ' , coin['id'])                                              
+                            else:
+                                count_erro = count_erro+1
+                                #eerro no campo valor
+                                #print('>>getcoins-7+7+7+8-Errro:::::', valor, ' - contErro>' , count_erro)
+                                print('>>getcoins-7+7+7+8-Errro:::::', ' - contErro>' , count_erro)
+                    
+                        except Exception as e:
+                            print('erro generico')
+                            count_erro = count_erro+1
+                            print('e:', e, ' - contErro>' , count_erro)
+                            print(f">>getcoins-10-Não ecxiste preço BRL na def getcoins ERRO VÉI: {e} - ERRO TIO: {e.__cause__}")
+                            return redirect('CCCCCCCCCCC')
+                    else:
+                        #Insere somente a moeda sem o preço
+                        cont+=cont
+                        valor = 0
+                        #print('55', coin['symbol'], coin['name'], coin['platforms'], valor, datetime.now(), coin['id'])
+                        insere_moeda(coin['symbol'], coin['name'], coin['platforms'], valor, datetime.now(), coin['id']) 
+
+                #2 FIM
+                if(coin_list):
+                    print("getcoins-11-Incluiu!")
+                    print('cont:', cont)
+                    print('count_erro:', count_erro)
+                    return redirect('moedas_list')
+            
+        except Exception as xe:
+            print('Erro exception: ', xe)
+            count_erro+=count_erro
+            valor = 0
+            plat = 0
+            insere_moeda(coin['symbol'], coin['name'], plat, valor, datetime.now(), coin['id'])
+            print('>>66 - INSERIU?  - cont>' , count_erro, ' - ' , coin['id'])
+        
+    else: # Se a requisição não for POST, redirecione ou faça outra coisa
+        print ('passou8')
+        return HttpResponse("Método <> POST --- não permitido!!!!!!!!!!", status=405)
+#
+#
+
+#
+#
+def total_moeda() -> int | None:
+    print('executa total_moeda()')
+    conn = sqlite3.connect('db.sqlite3')
+    cursor = conn.cursor()
+    query = "select Count(*) from coins_moedas;"
+    cursor.execute(query)
+    count = cursor.fetchone()[0]
+    conn.close()
+
+    try:
+        count = int(count)
+    except (ValueError, TypeError):
+        return None
+    
+    print('executa total_moeda():', count)
+    return count
+#
+#
+
+#
+#
+def selectComCursor():
+    #print ('total_moeda')
+    conn = sqlite3.connect('db.sqlite3')
+    cursor = conn.cursor()
+    query = "select * from coins_moedas;"
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    for row in rows:
+        print(row)
+    conn.close()
+#
+#
+
+#
+#Função para inserir os dados no banco de dados SQLite
+def insere_moeda(symbol, name, platforms, currency, data, idn):
+    conn = sqlite3.connect('db.sqlite3')
+    cursor = conn.cursor()
+    name = name.replace("'", "''")
+    query = "INSERT INTO coins_moedas (symbol, name, platforms, currency, data, idn) " \
+            f"VALUES ('{symbol}', '{name}', '{json.dumps(platforms)}', {currency}, '{data}', '{idn}');"
+    #print(query)
+    cursor.execute(query)
+    conn.commit()
+    conn.close()
+#
+#
+
+#
+#
 class MoedasListView(ListView):
     model = Moedas #Procura o nome da APP e o nome do modelo
 
-class MoedasImportListView(ListView):
-    model = Moedas #Procura o nome da APP e o nome do modelo
-    
-    def getcoins(request):
-        print("--------------------------------------------------")
-        if request.method == 'POST':
+    def post(self, request, *args, **kwargs):
+        print('MoedasListView', request.POST)
+        if 'importar_btn' in request.POST: # Usa o nome do seu botão como identificador
             try:
-                print ('passou4')
-                coin_list = cg.get_coins_list(include_platform=True)
-
-                ## Imprime as primeiras 20000 moedas para exemplo
-                #print("Primeiras 20000 moedas disponíveis na CoinGecko API:")
-                print("--------------------------------------------------")
-                for coin in coin_list[:20000]:
-                    print(f"ID: {coin['id']}, Símbolo: {coin['symbol']}, Nome: {coin['name']}, Plataformas: {coin['platforms']}")
-                    #insere_moeda({coin['symbol']}, {coin['name']}, {coin['platforms']}, None, datetime.now())                
-                
-                ## Para ver o número total de moedas, você pode usar a função len()
-                print(f"\nTotal de moedas disponíveis: {len(coin_list)}")
-
-                if(coin_list):
-                    print ('passou5')
-                    return redirect('moedas_list')
-                    return redirect(reverse('/moedas_importar.html'))
-                    #return coin_list        
-
+               print(">>>>>>>>>>>>>>>Abrindo form...")
+               return redirect('moedas_importar')
             except Exception as e:
-                print ('passou6')
-                print(f"Ocorreu um erro ao conectar-se à CoinGecko API: {e}")
-                return None
-            
-            print ('passou7')
-            return redirect('moedas_list', {'coin_list': coin_list})
-            return render(request, '/moedas_importar.html', {'coin_list': coin_list})
-            
-        # Se a requisição não for POST, redirecione ou faça outra coisa
-        print ('passou8')
-        return HttpResponse("Método não permitido!!!!!!!!!!", status=405)
+                # Trate erros
+                print(f"Erro ao abrir form importar moedas: {e}")
+                # Você pode adicionar uma mensagem de erro ao contexto, se desejar
+                context = self.get_context_data(**kwargs)
+                context['error_message'] = f"Erro: {e}"
+                return self.render_to_response(context)
+        
+        # Se for outro tipo de POST, volte para a lógica padrão
+        print("ERRO MoedasListView?...")
+        return super().post(request, *args, **kwargs)
+#
+#
 
-    #Função para inserir os dados no banco de dados SQLite
-    def insere_moeda(symbol, name, platforms, currency, data):
-        print ('passou9')
-        conn = sqlite3.connect('db.sqlite3')
-        cursor = conn.cursor()
-        query = "INSERT INTO coins_moedas ( symbol, name, platforms, currency, data) " \
-                f"VALUES (symbol = {symbol} ,name = {name} ,platforms = {platforms} ,currency = {currency} ,data = {data});"
-        #cursor.execute("INSERT INTO leitor_pdf_leitor (data, num_cartao, estabelecimento, valor) VALUES (?, ?, ?, ?)", (data, numero, estabelecimento, valor))
-        cursor.execute(query)
-        conn.commit()
-        conn.close()
-    #
-    #
+#
+#
+class MoedasImportListView(ListView):
+    model = Moedas #Procura o nome da APP e o nome do modelo        
+
+    def post(self, request, *args, **kwargs):
+        print('MoedasImportListView', request.POST)
+        if 'importar_btn' in request.POST: # Usa o nome do seu botão como identificador
+            try:
+               #print("EXECUTA getcoins...")
+               #getcoins(request)
+               print("REDIRECIONA para moedas_importar...")
+               return redirect('moedas_importar') 
+            except Exception as e:
+                # Trate erros
+                print(f"Erro ao importar moedas: {e}")
+                # Você pode adicionar uma mensagem de erro ao contexto, se desejar
+                context = self.get_context_data(**kwargs)
+                context['error_message'] = f"Erro: {e}"
+                return self.render_to_response(context)
+      
+        # Se for outro tipo de POST, volte para a lógica padrão
+        print("ERRO MoedasImportListView?...")
+        return super().post(request, *args, **kwargs)
+#
+#
+
+#
+#
+class MoedasImportarListView(ListView):
+    model = Moedas #Procura o nome da APP e o nome do modelo        
+
+    def post(self, request, *args, **kwargs):
+        print('MoedasImportarListView', request.POST)
+        if 'getcoins_btn' in request.POST:
+            try:
+               print("EXECUTA getcoins...")
+               getcoins(request)
+               print("REDIRECIONA para moedas_list...")
+               return redirect('moedas_list') 
+            except Exception as e:
+                # Trate erros
+                print(f"Erro ao importar moedas: {e}")
+                # Você pode adicionar uma mensagem de erro ao contexto, se desejar
+                context = self.get_context_data(**kwargs)
+                context['error_message'] = f"Erro: {e}"
+                return self.render_to_response(context)
+      
+        # Se for outro tipo de POST, volte para a lógica padrão
+        print("ERRO MoedasImportarListView?...")
+        return super().post(request, *args, **kwargs)
+
+    
+
+
 
 # class MoedasCreateView(CreateView):
 #     model = Moedas

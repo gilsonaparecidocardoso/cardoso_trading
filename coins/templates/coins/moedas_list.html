@@ -2,29 +2,32 @@
 {% load crispy_forms_tags %}
 {% block page_title %}Moedas{% endblock page_title %}
 {% block content %}
-    <h1>Moedas</h1>
-
+    <h1>Moedas</h1>    
+    <p></p>
+    <p></p>
     {%if moedas_list %}
-
+        <label text='Total de moedas cadastradas:'></label>
         <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">ID</th>
                     <th scope="col">Símbolo</th>
                     <th scope="col">Nome</th>
-                    <th scope="col">Plataformas</th>
+                    {% comment %} <th scope="col">Plataformas</th> {% endcomment %}
                     <th scope="col">Valor</th>
-                    <th scope="col">Data</th>
+                    {% comment %} <th scope="col">Data</th> {% endcomment %}
                 </tr>
             </thead>
             <tbody table-striped>
 
                 {% for moeda in moedas_list %}
                     <tr>
+                        <td >{{ moeda.idn }}</td>
                         <td>{{ moeda.symbol }}</td>
                         <td>{{ moeda.name }}</td>
-                        <td>{{ moeda.platforms }}</td>
+                        {% comment %} <td>{{ moeda.platforms }}</td> {% endcomment %}
                         <td>{{ moeda.currency}}</td>                        
-                        <td>{{ moeda.data | date:"d/m/Y"}}</td>
+                        {% comment %} <td>{{ moeda.data | date:"d/m/Y"}}</td> {% endcomment %}
                     </tr>
                 {% endfor %}
 
@@ -32,23 +35,14 @@
 
         </table>
 
-        <form method="POST" action = "{% url 'getcoins' %}">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <label for="word">Digite uma palavra:</label>
-            <input id="word" type="text" name="palavra" value="" />
-            <button type="submit" class="btn btn-primary">Importar moedas</button>     
-        </form>
-
     {% else %}
-        <p class="alert alert-info">Nenhuma moeda encontrada.</p>
-        
-        {% comment %} <Form action="{% url 'getcoins' %}" method="POST">
+        <form method="POST" action = "{% url 'moedas_importar' %}">
             {% csrf_token %}
             {{ form|crispy }}
-            <button type="submit" class="btn btn-primary">Importar moedas</button>
-        </form> {% endcomment %}
-
+            <p class="alert alert-info">Nenhuma moeda encontrada.</p>
+            <p></p>
+            <button type="submit" name="importar_btn" class="btn btn-primary">Importar moedas</button>
+        </form>
     {% endif %}
 
 {% endblock content %}

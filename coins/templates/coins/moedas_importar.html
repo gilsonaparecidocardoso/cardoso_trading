@@ -5,7 +5,31 @@
     <h1>Moedas</h1>
     <div class="row">
         <div class="jumbotron">
-            {% crispy form %}
+            <form method="POST" action = "{% url 'moedas_list' %}">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <label for="word">Digite uma palavra:</label>
+                <input id="word" type="text" name="palavra" value="" />
+                <p></p>
+                <button type="submit" name="getcoins_btn" class="btn btn-primary">Importar moedas</button>       
+                <p></p>
+                <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="10" aria-valuemax="100"></div>
+                </div>
+                <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </form>
 
         </div>
     </div>
