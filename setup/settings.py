@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from decouple import config, Csv
 from dj_database_url import parse as dburl
@@ -106,6 +107,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR.joinpath('static-files')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# In production, collectstatic will gather all static files into this directory
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

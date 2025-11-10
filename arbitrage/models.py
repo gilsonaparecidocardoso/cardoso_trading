@@ -9,6 +9,9 @@ class Arbitragem(models.Model):
     data     = models.DateTimeField(verbose_name="Data:") #default=datetime.now() ao realizar migrations ele gera sempre um novo
     processo = models.CharField(verbose_name="Processo:", max_length=200, null=False, blank=False)
 
+    def __str__(self):
+        return self.name
+    
 class Meta:
     ordering = ['data']
 
@@ -20,6 +23,9 @@ class ArbitragemCard(models.Model):
     data     = models.DateTimeField(verbose_name="Data:") #default=datetime.now() ao realizar migrations ele gera sempre um novo
     processo = models.CharField(verbose_name="Processo:", max_length=200, null=False, blank=False)
 
+    def __str__(self):
+        return self.name
+    
     @property
     def diferenca_cripto(self):
         if self.price_a > self.price_b:

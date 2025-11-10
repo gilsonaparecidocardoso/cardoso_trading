@@ -1,12 +1,71 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% load static %}
 {% block page_title %}Moedas{% endblock page_title %}
 {% block content %}
+
     <h1>Moedas</h1>    
     <p></p>
     <p></p>
-    {%if moedas_list %}
-        <label text='Total de moedas cadastradas:'></label>
+
+    <form method="POST" action = "{% url 'moedas_list' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        
+
+        <div class="card-body">
+            <h5 class="card-title">Pesquisar moeda</h5>
+            <p></p>
+            <p></p>
+            <div>
+                <label for="word">Moeda:</label>
+                <input id="word" type="text" name="moeda" value="" />
+                {% if moedas_list %}
+                    <button type="submit" name="pesquisar_btn" class="btn btn-primary">Pesquisar</button>                    
+                {% endif %}
+                {% comment %} {% if moedas_list %}
+                    <button type="submit" name="pesquisar_btn" class="btn btn-primary">Pesquisar</button>
+                    
+                    <div class="b-example-divider"></div>
+                        <div class="d-flex gap-2 justify-content-center py-5">
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span
+                            class="spinner-border spinner-border-sm"
+                            aria-hidden="true"
+                            ></span>
+                            <span class="visually-hidden" role="status">Loading...</span>
+                        </button>
+                        <button class="btn btn-primary" type="button" disabled>
+                            <span
+                            class="spinner-border spinner-border-sm"
+                            aria-hidden="true"
+                            ></span>
+                            <span role="status">Pesquisando...</span>
+                        </button>
+                        </div>
+                    </div>
+                {% else %}
+                {% endif %} {% endcomment %}
+
+            </div>
+            <p></p>
+            <button type="submit" name="getcoins_btn" class="btn btn-primary">Importar moedas</button>
+            <button type="submit" name="excluir_moedas_btn" class="btn btn-danger">Excluir moedas</button>
+            <p></p>
+            <p></p>
+            <p></p>
+
+        </div>
+
+    </form>
+
+
+    <p></p>
+    <p></p>
+
+    {% if moedas_list %}
+
+        <label>Total de moedas cadastradas:{{ moedas_list|length }}</label>
         <table class="table">
             <thead>
                 <tr>
@@ -22,7 +81,7 @@
 
                 {% for moeda in moedas_list %}
                     <tr>
-                        <td >{{ moeda.idn }}</td>
+                        <td>{{ moeda.idn }}</td>
                         <td>{{ moeda.symbol }}</td>
                         <td>{{ moeda.name }}</td>
                         {% comment %} <td>{{ moeda.platforms }}</td> {% endcomment %}
@@ -35,14 +94,60 @@
 
         </table>
 
-    {% else %}
-        <form method="POST" action = "{% url 'moedas_importar' %}">
+    {% else %}     
+
+        <form method="POST" action = "{% url 'moedas_list' %}">
             {% csrf_token %}
             {{ form|crispy }}
             <p class="alert alert-info">Nenhuma moeda encontrada.</p>
             <p></p>
-            <button type="submit" name="importar_btn" class="btn btn-primary">Importar moedas</button>
+            {% comment %} <button type="submit" name="importar_btn" class="btn btn-primary">Importar moedas</button> {% endcomment %}
         </form>
+
     {% endif %}
+
+    <div class="b-example-divider"></div>
+        <div class="container">
+            <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+                <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1" aria-label="Bootstrap">
+                    <svg class="bi" width="30" height="24" aria-hidden="true">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">&copy;
+                    {% now "Y" as current_year %} 
+                    {% if current_year == "2025" %} 
+                        2025 - Cardoso Desenvolvimento 
+                    {% else %} 
+                        2025 - {{ current_year }} - Cardoso Desenvolvimento 
+                    {% endif %} 
+                </span>
+
+                <img src="{% static 'images/facebook.png' %}" width="30" height="30" alt="Ir para Facebook">
+                <img src="{% static 'images/tiktok.png' %}" width="30" height="30" alt="Ir para Facebook">
+                <img src="{% static 'images/youtube.png' %}" width="30" height="30" alt="Ir para Facebook">
+
+                <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+                <li class="ms-3">
+                    <a class="text-body-secondary" href="#" aria-label="Instagram"
+                    ><svg class="bi" width="24" height="24" aria-hidden="true">
+                        <use xlink:href="#instagram"></use></svg
+                    ></a>
+                </li>
+                <li class="ms-3">
+                    <a class="text-body-secondary" href="#" aria-label="Facebook"
+                    ><svg class="bi" width="24" height="24">
+                        <use xlink:href="#facebook"></use></svg
+                    ></a>
+                </li>
+                </ul>
+                
+                <rect width="100%" height="100%" fill="var(--bs-secondary-bg)"></rect>
+                <a href="#">Volte ao topo</a>
+
+            </footer>
+        </div>
+    </div>
 
 {% endblock content %}

@@ -1,0 +1,7 @@
+moedas_list.html
+
+Pesquisar
+Ao informar a moeda e clicar em Pesquisar deve retornar somente a moeda pesquisada no grid inferior.
+
+Importar moedas
+Abre o form para importação
